@@ -1,5 +1,6 @@
 import signal
 import warnings
+from functools import wraps
 from multiprocessing import Pipe, Process
 
 import numpy as np
@@ -53,7 +54,7 @@ We recommend using other versions of NumPy.
 See https://github.com/numpy/numpy/issues/12793 for details.
 """
             )  # NOQA
-
+        self.closed = False
         nenvs = len(env_fns)
         self.remotes, self.work_remotes = zip(*[Pipe() for _ in range(nenvs)])
         self.ps = [

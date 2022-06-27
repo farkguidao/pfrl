@@ -96,7 +96,7 @@ def main():
         # Use different random seeds for train and test envs
         env_seed = test_seed if test else train_seed
         env = atari_wrappers.wrap_deepmind(
-            atari_wrappers.make_atari(args.env, max_frames=None),
+            atari_wrappers.make_atari(args.env, max_frames=None, render_mode='human' if args.render else None),
             episode_life=not test,
             clip_rewards=not test,
         )
@@ -108,8 +108,8 @@ def main():
             env = pfrl.wrappers.Monitor(
                 env, args.outdir, mode="evaluation" if test else "training"
             )
-        if args.render:
-            env = pfrl.wrappers.Render(env)
+        # if args.render:
+        #     env = pfrl.wrappers.Render(env)
         return env
 
     env = make_env(test=False)

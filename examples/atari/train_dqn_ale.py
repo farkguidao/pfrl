@@ -205,7 +205,7 @@ def main():
         # Use different random seeds for train and test envs
         env_seed = test_seed if test else train_seed
         env = atari_wrappers.wrap_deepmind(
-            atari_wrappers.make_atari(args.env, max_frames=args.max_frames),
+            atari_wrappers.make_atari(args.env, max_frames=args.max_frames,render_mode='human' if args.render else None),
             episode_life=not test,
             clip_rewards=not test,
         )
@@ -217,8 +217,9 @@ def main():
             env = pfrl.wrappers.Monitor(
                 env, args.outdir, mode="evaluation" if test else "training"
             )
-        if args.render:
-            env = pfrl.wrappers.Render(env)
+        # 由于gym atari游戏的API更改了，仿真模式要在创建环境时确认
+        # if args.render:
+        #     env = pfrl.wrappers.Render(env)
         return env
 
     env = make_env(test=False)
